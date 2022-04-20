@@ -1,0 +1,79 @@
+{
+  "id": "2546727",
+  "name": "feelChin-Demo",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "9743546",
+      "name": "暂停 停止 copy 2",
+      "font_class": "zanting",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "21432384",
+      "name": "路径 111",
+      "font_class": "lujing111",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
+      "icon_id": "20044173",
+      "name": "首页-选中",
+      "font_class": "home-inactive",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "626008",
+      "name": "左",
+      "font_class": "icon4",
+      "unicode": "e633",
+      "unicode_decimal": 58931
+    },
+    {
+      "icon_id": "9097237",
+      "name": "关闭",
+      "font_class": "guanbi",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
+    },
+    {
+      "icon_id": "10491711",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e694",
+      "unicode_decimal": 59028
+    },
+    {
+      "icon_id": "13191353",
+      "name": "更多",
+      "font_class": "gengduo",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "15045318",
+      "name": "左",
+      "font_class": "icon4-copy",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
+      "icon_id": "15045323",
+      "name": "左",
+      "font_class": "icon4-copy-copy",
+      "unicode": "e66c",
+      "unicode_decimal": 58988
+    },
+    {
+      "icon_id": "15045330",
+      "name": "左",
+      "font_class": "icon4-copy-copy-copy",
+      "unicode": "e66d",
+      "unicode_decimal": 58989
+    }
+  ]
+}

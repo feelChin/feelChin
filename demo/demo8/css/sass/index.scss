@@ -1,0 +1,42 @@
+@charset "utf-8";
+@import '_reset.scss'; 
+
+
+@function random_range($min, $max) {
+    $rand: random();
+    $random_range: $min + floor($rand * (($max - $min) + 1));
+    @return $random_range;
+}
+
+.book{
+    width: 100%;
+    height: 100%;
+    @for $i from 1 through 7 {
+        .item:nth-child(#{$i}){
+            div{
+                height: random_range(20, 100) * 1vh;
+                background: rgb(random_range(0,255),random_range(0,255),random_range(0,255));
+            }
+        }
+    }
+}
+
+.bookNav{
+    position: fixed;
+    top: 3vw;
+    right: 3vw;
+    padding: 20px 0;
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,.3);
+    div{
+        padding: 0 20px;
+        font-size: 16px;
+        line-height: 1.8;
+        cursor: pointer;
+        &.active{
+            background: #000;
+            color: white;
+            transition: .1s;
+        }
+    }
+}

@@ -1,0 +1,70 @@
+@charset "utf-8";
+@import '_reset.scss';  
+
+@function random_range($min, $max) {
+    $rand: random();
+    $random_range: $min + floor($rand * (($max - $min) + 1));
+    @return $random_range;
+}
+
+.App{
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .items{
+        width: 70%;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        @for $i from 1 through 4 {
+            .item:nth-child(#{$i}){
+                background: rgb(random_range(0,255),random_range(0,255),random_range(0,255));
+            }
+        }
+        .item{
+            width: 48%;
+            padding: 5vw;
+            margin: 1.5vw 0;
+        }
+    }
+}
+
+.cursordot {
+	position: fixed;
+	top: 0;
+	left: 0;
+	border-radius: 100%;
+	pointer-events: none;
+	opacity: 0;
+	will-change: transform;
+	background-size: contain;
+	mix-blend-mode: exclusion;
+	&::before {
+		content: '';
+		position: absolute;
+        top: 50%;
+        left: 50%;
+		width: 100%;
+		height: 100%;
+        transform: translate(-50%,-50%);
+		border-radius: 50%;
+		background: white;
+		mix-blend-mode: exclusion;
+	}
+
+	&:after {
+		content: '';
+		position: absolute;
+        top: 50%;
+        left: 50%;
+		width: 100%;
+		height: 100%;
+		border: 1px solid white;
+		transform: translate(-50%, -50%) scale(1.2);
+		mix-blend-mode: exclusion;
+		border-radius: 50%;
+	}
+}

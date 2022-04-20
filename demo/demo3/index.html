@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet " href="css/index.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <title>音乐播放器-歌词匹配</title>
+</head>
+<body>
+    <div class="App">
+        <div class="AppMobile">
+            <figure class="AppMobileImg">
+                <img class="imgs" src="../style/img/phone.png" alt="" />
+                <div class="AppHtml">
+                    <div class="AppWrapper">
+                        <header>
+                            <i class="webclose iconfont">&#xe633;</i>
+                            <h5>feelChin</h5>
+                            <i class="webmore iconfont">&#xe624;</i>
+                        </header>
+                        <div class="htmlWrapper">
+                            <div class="musicBox">
+                                <audio  src="music/music.mp3"></audio>
+                                <div class="music">
+                                    <div class="musictx">
+                                        <figure><img class="musictximg" src="img/0.jpg" alt=""></figure>
+                                    </div>
+                                    <h5>童年</h5>
+                                </div>
+                                <div class="ctrl">
+                                    <div class="musicctrl">
+                                        <i class="iconfont play">&#xe64b;</i>
+                                        <i class="iconfont pause">&#xe601;</i>
+                                    </div>
+                                    <time class="nowtime"></time>
+                                    <div class="musictimeline">
+                                        <span></span>
+                                    </div>
+                                    <time class="endtime"></time>
+                                </div>
+                                <div class="lrc"></div>
+                            </div>
+                        </div>
+                        <footer class="Appnav">
+                            <a href="">
+                                <div class="icon active">
+                                    <span class='iconfont'>&#xe600;</span>
+                                    <figure><img class="imgs" src="../style/img/phone-yun.png" alt="" /></figure>
+                                </div>
+                            </a>
+                        </footer>
+                    </div>
+                    <div class="AppWrapperBg"></div>
+                </div>
+            </figure>
+        </div>
+    </div>
+    <script src='js/index.js'></script>
+    <script>
+        const audio = _('audio');
+
+       const httpGet = (url, callback, err = console.error) => {
+            const request = new XMLHttpRequest();
+            request.open("GET", url, true);
+            request.onload = () => callback(request.responseText);
+            request.onerror = () => err(request);
+            request.send();
+        };
+
+        const parseLyric = function (text) {    //解析歌词
+            let lyricArr = text.split('\n');
+            let result = [];
+            for (i = 0; i < lyricArr.length; i++) {
+                let playTimeArr = lyricArr[i].match(/\[\d{2}:\d{2}((\.|\:)\d{2})\]/g);
+                let lineLyric = "";
+                if (lyricArr[i].split(playTimeArr).length > 0) {
+                    lineLyric = lyricArr[i].split(playTimeArr);
+                }
+                if (playTimeArr != null) {
+                    for (let j = 0; j < playTimeArr.length; j++) {
+                        let time = playTimeArr[j].substring(1, playTimeArr[j].indexOf("]")).split(":");
+                        if (String(lineLyric).substr(1) !== '') {
+                            result.push({
+                                time: (parseInt(time[0]) * 60 + parseFloat(time[1])).toFixed(4),
+                                content: String(lineLyric).substr(1)
+                            });
+                        }
+                    }
+                }
+            }
+            return result;
+        };
+
+        const tin = function (time) {   // 歌曲时间计算
+            if (time < 60) {
+                return time = '00' + ':' + time.toString().padStart(2, '0');
+            }
+            var ot = Math.floor(time / 60).toString().padStart(2, '0');
+            var oh = Math.floor(time % 60).toString().padStart(2, '0');
+            return time = ot + ":" + oh;
+        };
+
+        const musicCtrl = function () {  // 控制歌曲
+            let ctrl = _('.musicctrl'),
+                musictximg = _('.musictximg'),
+                nowtime = _('.nowtime'),
+                endtime = _('.endtime'),
+                timelinebox = _('.musictimeline'),
+                timeline = _('.musictimeline span'),
+                timeDisplay;
+
+            audio.load();
+            audio.addEventListener("canplay", function () {  // 音乐可以播放时
+                endtime.innerHTML = tin(audio.duration);
+            });
+
+            audio.addEventListener("timeupdate", function () {  //音乐播放时
+                timeDisplay = Math.floor(audio.currentTime);
+                timeline.style.width = timeDisplay / audio.duration * 100 + '%';
+                nowtime.innerHTML = tin(timeDisplay);
+            });
+
+            timelinebox.addEventListener(clickEvent, function (e) {
+                let timeboxWidth = timelinebox.offsetWidth;
+                let rect = e.target.getBoundingClientRect(),
+                    x;
+                if (!e.touches) {
+                    x = ((e.clientX - rect.left) / timeboxWidth);
+                } else {
+                    x = ((e.touches[0].pageX - rect.left) / timeboxWidth);
+                };
+                audio.currentTime = x * audio.duration;
+                if (ctrl.classList.contains('active')) {
+
+                } else {
+                    audio.play();
+                    ctrl.classList.add('active');
+                    musictximg.classList.add('active');
+                }
+            });
+
+            function ctrlclick() {
+                if (ctrl.classList.contains('active')) {
+                    audio.pause();
+                    ctrl.classList.remove('active');
+                    musictximg.classList.remove('active');
+                } else {
+                    audio.play();
+                    ctrl.classList.add('active');
+                    musictximg.classList.add('active');
+                }
+            }
+            ctrl.addEventListener('click', ctrlclick, false);
+        };
+
+        const lrcDisplay = function () {  //歌词展示   //执行lyc解析
+            const lrcUpdate = function (res) {
+                let result = parseLyric(res),
+                    lrcFather = _('.lrc'),
+                    createul = document.createElement('ul'),
+                    lineNo = 0,  //歌词行数
+                    MusicListWrapper;
+
+                for (let i = 0; i < result.length; i++) {
+                    let createli = document.createElement('li');
+                    createli.innerHTML = result[i].content;
+                    createul.appendChild(createli);
+                    createul.className = 'createMusicList';
+                }
+                lrcFather.innerHTML = '';
+                lrcFather.append(createul);
+                MusicListWrapper = _('.createMusicList');
+
+                // 滚动播放 歌词高亮  增加类名active
+                function highLight() {
+                    let musicList = _$('.createMusicList li');
+                    let musicListActive;
+                    for (let i = 0; i < musicList.length; i++) {
+                        if (i == lineNo) {
+                            musicList[i].classList.add('active');
+                            musicListActive = musicList[i];
+                        } else {
+                            musicList[i].classList.remove('active');
+                        }
+                    };
+                    let actTop = musicListActive.offsetTop,
+                        acth = musicListActive.offsetHeight,
+                        transTop,
+                        wrapperh = MusicListWrapper.offsetHeight;
+                    function draw() {
+                        transTop = -actTop - (acth / 2) + (wrapperh / 2);
+                        MusicListWrapper.style.transform = `translate3d(0,` + transTop + `px,0)`;
+                        requestAnimationFrame(draw);
+                    }
+                    requestAnimationFrame(draw);
+                };
+                highLight();
+
+                audio.addEventListener("timeupdate", function () {
+                    if (lineNo == result.length) {
+                        lineNo--
+                        return
+                    }
+                    lineNo = getLineNo(audio.currentTime);
+                    highLight();
+                    lineNo++;
+                    MusicListWrapper.style.transition = '.3s';
+                    MusicListWrapper.style.transitionTimingFunction = ' ease-in-out'
+                });
+   
+                function getLineNo(currentTime) {   // 当快进或者倒退的时候，找到最近的后面那个result[i].time
+                    if (currentTime >= parseFloat(result[lineNo].time)) {
+                        // 快进
+                        for (let i = result.length - 1; i >= lineNo; i--) {
+                            if (currentTime >= parseFloat(result[i].time)) {
+                                return i;
+                            }
+                        }
+                    } else {
+                        // 后退
+                        for (let i = 0; i <= lineNo; i++) {
+                            if (currentTime < parseFloat(result[i].time)) {
+                                return i - 1;
+                            }
+                        }
+                    }
+                };
+
+                audio.addEventListener("ended", function () {     //播放结束重置
+                    lineNo = 0;
+                    highLight();
+                    audio.play();
+                    MusicListWrapper.style.transition = '0s';
+                    MusicListWrapper.style.transform = `translate3d(0,0,0)`;
+                });
+            }
+            httpGet('music/music.lrc',function (res) {
+                if (res) {
+                    lrcUpdate(res)
+                }
+            })
+        };
+
+        musicCtrl();
+        lrcDisplay();
+
+
+    </script>
+</body>
+
+</html>

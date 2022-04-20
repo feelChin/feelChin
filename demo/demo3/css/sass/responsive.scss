@@ -1,0 +1,72 @@
+
+
+@media all and (orientation: portrait) {
+    /* 竖屏 */
+}
+
+@media all and (orientation: landscape) {
+    /* 横屏 */
+}
+
+@media screen and (max-width: 1800px) {
+
+}
+@media screen and (max-width: 1600px) {
+
+}
+@media screen and (max-width: 1440px) {
+    
+}
+@media screen and (max-width: 1366px) {
+   
+}
+@media screen and (max-width: 1280px) {
+    
+}
+@media screen and (max-width: 1024px) {
+
+}
+@media screen and (max-width: 860px) {
+
+}
+@media screen and (max-width: 750px) {
+
+}
+@media screen and (max-width: 640px) {
+
+}
+@media screen and (max-width: 480px) {
+
+}
+@media screen and (max-width: 450px) {
+    .App .AppMobile {
+        padding: 0;
+        .AppMobileImg{
+            width: 100vw;
+            &>img{
+                display: none;
+            }
+            .AppHtml{
+                position: static;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                .AppWrapperBg{
+                    display: none;
+                }
+                .AppWrapper{
+                    header{
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 375px) {
+
+}
+@media screen and (max-width: 320px) {
+    
+}

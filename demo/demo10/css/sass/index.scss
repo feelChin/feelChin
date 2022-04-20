@@ -1,0 +1,41 @@
+@charset "utf-8";
+@import '_reset.scss';  //初始化
+
+
+.scrollContainer {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.scrollItem1{
+    height: 3000px;
+    background: #000;
+}
+
+.scrollItem2{
+    height: 5000px;
+}
+
+.imageSequence {
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+    .text{
+        position: absolute;
+        top: 30%;
+        left: 0;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+.canvasContainer {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+}
+
+canvas{
+    position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; object-fit: cover; object-position: center center;
+}

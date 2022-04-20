@@ -1,0 +1,165 @@
+/*
+ * @Author: feelChin 
+ * @Date: 2020-11-03 15:28:25 
+ * @Last Modified by: feelChin
+ * @Last Modified time: 2021-05-18 12:25:56
+ */
+@charset "utf-8";
+@import '../../../style/sass/_reset.scss';
+@import '../../../style/sass/_theme.scss';
+@import url('../../style/iconfont/iconfont.css');
+
+
+@keyframes musictxro{
+    from{
+        transform: rotate(0);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+}
+
+.musicBox{
+    width: 90%;
+    margin: 0 auto;
+    padding: 11% 0;
+    .music{
+        text-align: center;
+        font-size: 0;
+        line-height: 1;
+        .musictx{
+            width: 100%;
+            figure{
+                width: 210px;
+                border-radius: 50%;
+                overflow: hidden;
+                margin: auto;
+                img{
+                    width: 100%;
+                    animation: musictxro 10s infinite linear;
+                    animation-play-state: paused;
+                    &.active{
+                        animation-play-state: running;
+                    }
+                }
+            }
+        }
+        h5{
+            margin: 20px 0;
+            font-size: 16px;
+            font-weight: 400;
+            color: $c3;
+        }
+    }
+    .lrc{
+        margin-top: 20px;
+        width: 100%;
+        height: 180px;
+        position: relative;
+        overflow: hidden;
+        &:after,&:before{
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(to bottom,white,transparent);
+            z-index: 3;
+        }
+        &:after{
+            top: initial;
+            bottom: -3px;
+            background: linear-gradient(to top,white,transparent);
+        }
+        ul{
+            position: absolute;
+            top: 0;
+            width: 100%;
+            left: 0;
+            height: 100%;
+            text-align: center;
+            font-size: 15px;
+            transition-timing-function: ease-out;
+            li{
+                transition: .4s;
+                &.active{
+                    color: #13e318;
+                    font-size: 18px;
+                }
+            }
+        }
+    }
+    .ctrl{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        .musicctrl{
+            position: relative;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1px solid #13e318;
+            box-sizing: border-box;
+            @include flex;
+            color: #13e318;
+            cursor: pointer;
+            &.active{
+                .pause{
+                    @include ov1;
+                }
+                .play{
+                    @include ov0;
+                }
+            }
+            i{
+                cursor: pointer;
+                @include patl;
+                font-size: 12px;
+                line-height: 1;
+                transform-origin: center;
+                transform: translate(-50%,-50%) scale(.8);
+                transition: .4s;
+                &.pause{
+                    @include ov0;
+                }
+            }
+        }
+        time{
+            color: $c9;
+        }
+        .nowtime{
+            margin-left: 16px;
+        }
+        .musictimeline{
+            cursor: pointer;
+            position: relative;
+            flex: 1;
+            height: 8px;
+            margin: 0 24px;
+            &:after{
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                display: block;
+                transform: translateY(-50%);
+                background: #F0F0F0;
+            }
+            span{
+                position: absolute;
+                top: 50%;
+                left: 0;
+                width: 0%;
+                height: 1px;
+                display: block;
+                transform: translateY(-50%);
+                background: #13e318;
+            }
+        }
+    }
+}
+
+

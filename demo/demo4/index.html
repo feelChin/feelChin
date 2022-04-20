@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet " href="css/index.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <title>瀑布流</title>
+</head>
+<body>
+    <ul class="pubuliu"></ul>
+    <script src='js/index.js'></script>
+    <script>
+        let pubuliu = _('.pubuliu'),
+            num = 30,  // 分页数据
+            arr = [],  // 存放分页数据
+            pagIndex = 0; // 分页索引
+
+        const waters = function () {  // 瀑布流实现
+            let item = _$('.pubuliu li'),
+                itemimg;
+
+            for (let i = 0; i < item.length; i++) {
+                if (!item[i].classList.contains('wfc')) {
+                    item = item;
+                    item[i].classList.add('wfc');
+                    itemimg = item[i].querySelectorAll('img');
+                }
+            };
+
+            function waterFall(column, pubuliu) {
+                let itemWidth = item[0].offsetWidth,
+                    columns = column,   // 列
+                    gaps = column - 1,  // 间距
+                    arr = [];
+                let gap = (pubuliu.offsetWidth - (itemWidth * columns)) / gaps;
+                if (gaps == 0) {
+                    gap = 20;
+                }
+                for (let i = 0; i < item.length; i++) {
+                    if (i < columns) {
+                        item[i].style.top = 0;
+                        item[i].style.left = (itemWidth + gap) * i + 'px';
+                        arr.push(item[i].offsetHeight);
+                    } else {
+                        let minHeight = arr[0];
+                        let index = 0;
+                        for (let j = 0; j < arr.length; j++) {
+                            if (minHeight > arr[j]) {
+                                minHeight = arr[j];
+                                index = j;
+                            }
+                        }
+                        item[i].style.top = arr[index] + gap + 'px';
+                        item[i].style.left = item[index].offsetLeft + 'px';
+                        arr[index] += item[i].offsetHeight + gap;
+                    }
+                };
+            };
+
+            function changewater() {
+                if (w > 1280) {
+                    waterFall(4, pubuliu);
+                }
+                if (w <= 1280) {
+                    waterFall(3, pubuliu);
+                }
+                if (w <= 860) {
+                    waterFall(2, pubuliu);
+                }
+                if (w <= 640) {
+                    waterFall(1, pubuliu);
+                }
+                pubuliu.style.height = pubuliu.scrollHeight + 'px';
+            };
+
+            function imgonload() {
+                for (let k = 0; k < itemimg.length; k++) {
+                    itemimg[k].onload = function () {
+                        changewater();
+                    }
+                    if (itemimg[k].complete) {
+                        changewater();
+                    }
+                    itemIndex = itemimg[k].parentNode.offsetTop;
+                }
+            };
+            imgonload();
+
+            window.addEventListener('resize', function () {
+                pubuliu.style.height = 0;
+                changewater();
+            });
+        };
+
+        const calculateDanage = function (min, max) {
+            return Math.max(Math.floor(Math.random() * max) + 1, min);
+        };
+
+        for (let i = 1; i < 101; i++) {
+            pubuliu.innerHTML += `
+                <li>
+                    <img src="img/${calculateDanage(0,10)}.jpg" alt="">
+                    <h5>第${i}项</h5>
+                </li>
+            `
+            waters();
+        };
+
+    </script>
+</body>
+
+</html>

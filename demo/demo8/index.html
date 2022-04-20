@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/index.css">
+    <title>书签章节导航</title>
+</head>
+<body>
+    <div class="bookNav"></div>
+    <div class="book">
+        <div class="item">
+            <figure data-index="0" data-name="第一章"></figure>
+            <div></div>
+        </div>
+        <div class="item">
+            <figure data-index="1" data-name="第二章"></figure>
+            <div></div>
+        </div>
+        <div class="item">
+            <figure data-index="2" data-name="第三章"></figure>
+            <div></div>
+        </div>
+        <div class="item">
+            <figure data-index="3" data-name="第四章"></figure>
+            <div></div>
+        </div>
+        <div class="item">
+            <figure data-index="4" data-name="第五章"></figure>
+            <div></div>
+        </div>
+        <div class="item">
+            <figure data-index="5" data-name="第六章"></figure>
+            <div></div>
+        </div>
+        <div class="item">
+            <figure data-index="6" data-name="第七章"></figure>
+            <div></div>
+        </div>
+    </div>
+    <script>
+        const bookTitle = document.querySelectorAll('.book figure');
+        const bookNav = document.querySelector('.bookNav');
+
+        const renderBookNav = () => {  // 渲染导航列表
+            let html = ''
+            bookTitle.forEach(el => {
+                html += `
+                    <div data-index="${el.getAttribute('data-index')}">${el.getAttribute('data-name')}</div>
+                `
+            })
+            bookNav.innerHTML = html
+        }
+        renderBookNav();
+
+
+        bookNav.addEventListener('click', e => {   // 点击导航联动
+            let target = e.target;
+            if (!target.classList.contains('active')) {
+                let index = target.getAttribute('data-index');
+
+                bookTitle[index].scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        })
+
+
+        const child = bookNav.children;      // 更新类名
+        const remove = () => {
+            [...child].forEach(el => {
+                el.classList.remove('active')
+            })
+        }
+
+       
+        const config = {                    // 观察器监听位置
+            rootMargin: '0px',
+            threshold: 0,
+        };
+
+        const observer = new IntersectionObserver(function (entries) {
+            let visible, nearest, i;
+            for (const item of bookTitle) {
+                const rect = item.getBoundingClientRect();
+                // 找到最近一个
+                if (rect.bottom < 0) {
+                    nearest = item;
+                } else {
+                    // 找到第一个可见
+                    if (rect.top <= window.innerHeight) {
+                        visible = item;
+                        break;
+                    }
+                }
+            }
+
+            if (visible) {
+                // 高亮可视标题
+                i = visible.getAttribute('data-index')
+            } else{
+                // 高亮最近的标题
+                i = nearest.getAttribute('data-index')
+            }
+            remove();
+
+            child[i].classList.add('active')
+
+        }, config)
+
+        bookTitle.forEach(item => {
+            observer.observe(item);
+        });
+
+    </script>
+</body>
+</html>

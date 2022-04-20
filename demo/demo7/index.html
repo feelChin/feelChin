@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet " href="css/index.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <title>小游戏-我们一起来拼运</title>
+</head>
+<body>
+    <div class="App">
+        <div class="AppMobile">
+            <figure class="AppMobileImg">
+                <img class="imgs" src="../style/img/phone.png" alt="" />
+                <div class="AppHtml">
+                    <div class="AppWrapper">
+                        <header>
+                            <i class="webclose iconfont">&#xe633;</i>
+                            <h5>feelChin</h5>
+                            <i class="webmore iconfont">&#xe624;</i>
+                        </header>
+                        <div class="htmlWrapper">
+                            <div class="outsideBox active" style="background: url(img/0.jpg);background-size: cover;">
+                                <figure><img src="img/1.png" alt=""></figure>
+                                <button><span>开始游戏</span></button>
+                                <p>第1关</p>
+                            </div>
+                            <div class="insideBox">
+                                <div class="head">第1关</div>
+                                <div class="box">
+                                    <div class="title">
+                                        <div class="player characterItems">
+                                            <div class="character">
+                                                <figure><img class="imgs" src="img/3.jpg" alt=""></figure>
+                                                <div class="font">
+                                                    <h5>玩家</h5>
+                                                </div>
+                                            </div>
+                                            <div class="bloodBox">
+                                                <div class="bloodLast"></div>
+                                                <div class="blood"></div>
+                                            </div>
+                                        </div>
+                                        <div class="moster characterItems">
+                                            <div class="character">
+                                                <figure><img class="imgs" src="img/2.jpg" alt=""></figure>
+                                                <div class="font">
+                                                    <h5>怪兽</h5>
+                                                </div>
+                                            </div>
+                                            <div class="bloodBox">
+                                                <div class="bloodLast"></div>
+                                                <div class="blood"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="log">
+                                        <ul></ul>
+                                    </div>
+                                    <div class="list">
+                                        <div class="attclick">普通攻击</div>
+                                        <div class="speclick">技能攻击</div>
+                                        <div class="lifeclick">恢复生命</div>
+                                        <div class="runclick">逃跑</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="death">
+                                <div class="box">
+                                    <figure>
+                                        <img class="imgs" src="img/4.png" alt="">
+                                        <div class="name"></div>
+                                    </figure>
+                                    <div class="font">
+                                        <h5></h5>
+                                    </div>
+                                </div>
+                                <div class="items">
+                                    <div class="goon">下一关</div>
+                                    <div class="close">返回</div>
+                                </div>
+                            </div>
+                        </div>
+                        <footer class="Appnav">
+                            <a href="">
+                                <div class="icon active">
+                                    <span class='iconfont'>&#xe600;</span>
+                                    <figure><img class="imgs" src="../style/img/phone-yun.png" alt="" /></figure>
+                                </div>
+                            </a>
+                        </footer>
+                    </div>
+                    <div class="AppWrapperBg"></div>
+                </div>
+            </figure>
+        </div>
+    </div>
+    <script src='js/index.js'></script>
+    <script>
+        let outsideBox = _('.outsideBox'),
+            insideBox = _('.insideBox'),
+            goGame = _('.outsideBox button'),
+            playerHealth = 100,
+            monsterHealth = 100,
+            fightlog = [],
+            count = 1,
+            pattack = 5,
+            mattack = 12,
+            lifeCount = 11,
+            huifuCount = lifeCount,
+            player = _('.player .blood'),
+            moster = _('.moster .blood'),
+            log = _('.log ul'),
+            attclick = _('.attclick'),
+            speclick = _('.speclick'),
+            lifeclick = _('.lifeclick'),
+            runclick = _('.runclick'),
+            death = _('.death'),
+            goon = _('.death .goon'),
+            deathClose = _('.death .close'),
+            poetry = [
+                '倚此天罡剑，壮士当羡傲黄泉，只是冬已现。',
+                '花落秋风至， 萧瑟轻扬肃肃意， 残生终告止。',
+                '锦绣乎山茶， 虽为璀璨终归去， 吾身如此花。',
+                '寒刃已及体， 生死狭间忽有悟， 无非轮回矣。',
+                '虽为弥留时， 谨献赞颂于吾师， 此身须臾至。',
+                '寥落乎馀响， 尚存一息随之逝， 悲风共凄凉。',
+                '春意虽盎然， 燕绿莺红非关我， 今已无所羡。',
+                '身形渐迷离，幻梦忽觉惊坐起，朝露待日晞。',
+                '别离时才方知这世间，花亦花，人亦人。'
+            ];
+
+        const calculateDanage = function (min, max) {
+            return Math.max(Math.floor(Math.random() * max) + 1, min);
+        };
+
+        const playerAttacks = function (a, b) {
+            let damage = calculateDanage(a, b);
+            monsterHealth -= damage;
+
+            moster.style.width = monsterHealth + '%';
+            _('.moster .bloodLast').style.width = monsterHealth + '%';
+
+            fightlog.unshift({
+                isPlayer: true,
+                text: '玩家的攻击对怪兽造成了' + damage + '点伤害'
+            });
+        };
+        const monsterAttacks = function (a, b) {
+            let damage = calculateDanage(a, b);
+            playerHealth -= damage;
+
+            player.style.width = playerHealth + '%';
+            _('.player .bloodLast').style.width = playerHealth + '%';
+
+            fightlog.unshift({
+                isPlayer: false,
+                text: '怪兽的攻击对玩家造成了' + damage + '点伤害'
+            });
+        };
+
+        const die = function (who) {
+            active(death, 'active');
+            let title = _('.death .name');
+            let text = _('.death h5');
+            title.innerHTML = who;
+            text.innerHTML = poetry[calculateDanage(0, poetry.length - 1)];
+        };
+
+        const winorfail = function () {
+            if (playerHealth <= 0 && monsterHealth <= 0) {
+                die('悲怆!  共亡');
+                _('.death .name').style.fontSize = '24px';
+
+                _('.death .items div').style.display = 'none';
+
+                moster.style.display = 'none';
+                _('.moster .bloodLast').style.display = 'none';
+                player.style.display = 'none';
+                _('.player .bloodLast').style.display = 'none';
+            } else if (playerHealth <= 0) {
+                die('玩家');
+
+                _('.death .name').style.fontSize = '32px';
+                _('.death .items div').style.display = 'flex';
+
+                player.style.display = 'none';
+                _('.player .bloodLast').style.display = 'none';
+            } else if (monsterHealth <= 0) {
+                die('怪兽');
+
+                _('.death .name').style.fontSize = '32px';
+                moster.style.display = 'none';
+                _('.moster .bloodLast').style.display = 'flex';
+            }
+        };
+
+        const logHTMl = function () {
+            log.innerHTML = '';
+            for (let i = 0; i < fightlog.length; i++) {
+                let isPlayer = '';
+                if (fightlog[i].isPlayer == true) {
+                    isPlayer = 'Player'
+                } else {
+                    isPlayer = ''
+                }
+                log.innerHTML +=
+                    ` 
+                    <li class='${isPlayer}'>${fightlog[i].text}</li>
+                    `
+                    ;
+            }
+        };
+
+
+        const attack = function () {
+            playerAttacks(pattack, mattack);
+            monsterAttacks(pattack, mattack);
+            logHTMl();
+            winorfail();
+        };
+
+        const specialAttack = function () {
+            playerAttacks(pattack + 10, mattack + 20);
+            monsterAttacks(pattack + 10, mattack + 20);
+            logHTMl();
+            winorfail();
+        };
+
+        const huifu = function () {
+            huifuCount --;
+            console.log(huifuCount)
+
+            if(huifuCount <= 0){
+                fightlog.unshift({
+                    isPlayer: true,
+                    text: '不能恢复了'
+                });
+                logHTMl();
+                return
+            }
+
+            if (playerHealth <= 80) {
+                playerHealth += 20
+            } else {
+                playerHealth = 100
+            }
+            fightlog.unshift({
+                isPlayer: true,
+                text: `剩余恢复次数为${huifuCount - 1}`
+            });
+            logHTMl();
+
+            player.style.width = playerHealth + '%';
+            _('.player .bloodLast').style.width = playerHealth + '%';
+        };
+
+        const taopao = function () {
+            outsideBox.classList.add('active');
+            death.classList.remove('active');
+        }
+
+        const reset = function(){
+            moster.style.display = 'block';
+            _('.moster .bloodLast').style.display = 'block';
+            player.style.display = 'block';
+            _('.player .bloodLast').style.display = 'block';
+
+            moster.style.width = '100%';
+            _('.moster .bloodLast').style.width = '100%';
+            player.style.width = '100%';
+            _('.player .bloodLast').style.width = '100%';
+
+            playerHealth = 100;
+            monsterHealth = 100;
+            fightlog = [];
+            logHTMl();
+        };
+
+        attclick.addEventListener('click', attack);
+        speclick.addEventListener('click', specialAttack);
+        lifeclick.addEventListener('click', huifu);
+        runclick.addEventListener('click', taopao);
+        deathClose.addEventListener('click', taopao);
+
+        goGame.addEventListener('click', function () {
+            outsideBox.classList.remove('active');
+            _('.death .items div').style.display = 'flex';
+
+            reset();
+
+            huifuCount = lifeCount;
+        });
+
+        goon.addEventListener('click', function () {
+            death.classList.remove('active');
+
+            reset();
+
+            count ++;
+            _('.insideBox .head').innerHTML = `第${count}关`;
+            _('.outsideBox p').innerHTML = `您上次到达了游戏的第${count}关`;
+
+            lifeCount --;
+            huifuCount = lifeCount;
+            pattack += 5;
+            mattack += 12;
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+	<title></title>
+<link rel="stylesheet" type="text/css" href="css/index.css">
+</head>
+<body>
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide red">
+        	<section>
+        		<img id="bg" src="images/swiper_1/bg.png">
+        		<img id="dog" src="images/swiper_1/dog.png">
+        	</section>
+        	<div>
+        		<figure><img src="images/swiper_1/2018.png"></figure>
+        		<figure><img src="images/swiper_1/wd.png"></figure>
+        		<figure><img src="images/swiper_1/ndbg.png">	</figure>
+        	</div>
+
+        </div>
+        <div class="swiper-slide blue">
+            <section id="swiper_2_bg">
+                <div>loser</div>
+                <audio id="audio" src="audio/loser.mp3"></audio>
+                <canvas width="300" height="300" id="canvas"></canvas>
+                <div>
+                    <img id="music_kz" src="images/swiper_2/play.png">
+                </div>
+                <section id="aa"></section>
+            </section>
+        </div>
+        <div class="swiper-slide green">
+            <section class="swiper_3_bg">
+                <img  src="images/swiper_3/3.png">
+                <img  src="images/swiper_3/4.png">
+                <img  src="images/swiper_3/5.png">
+                <img  src="images/swiper_3/6.png">
+                <img  src="images/swiper_3/7.png">
+                <img  src="images/swiper_3/8.png">
+                <img  src="images/swiper_3/9.png">
+                <img  src="images/swiper_3/10.png">
+                <img  src="images/swiper_3/11.png">
+                <img  src="images/swiper_3/12.png">
+                <img  src="images/swiper_3/1.png">
+                <img  src="images/swiper_3/2.png">
+            </section>
+        </div>
+        <div class="swiper-slide yellow">
+            <section>
+                <img id="swiper_4_bg" src="images/swiper_4/bg.png">
+            </section>
+            <div>
+                <img id="s2019" src="images/swiper_4/2019.png">
+                <img id="xnkl" src="images/swiper_4/xnkl.png">
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="js/swiper.min.js"></script>
+<script src="js/music.js"></script>
+
+<script>  
+    let flag = true;
+    const imgload = function(){
+        let img = document.querySelectorAll(".swiper_3_bg img");
+        for (let i = 0; i < img.length; i++) {
+            img[i].style.height = 'auto';
+            img[i].style.top = Math.floor(Math.random()*( 72 - 22 + 1) + 22) + '%';
+            img[i].style.left = Math.floor(Math.random()*( 80 - 20 + 1) + 20) + '%';
+            img[i].style.width = 8 + '%';
+            img[i].style.transform = `translate3d(-50%,-50%,0) rotate(` + Math.random() * 180 + `deg)`;
+            img[i].addEventListener('click',function(){
+                if(img[i].classList.contains('active')){
+                    img[i].classList.remove('active');
+                }else{
+                    img[i].classList.add('active');
+                }
+            })
+        };
+    };
+
+    var mySwiper = new Swiper ('.swiper-container', {
+        direction: 'vertical', // 垂直切换选项
+        speed:600,
+        on: {
+            init: function(){
+
+            },
+            slideNextTransitionStart: function(){
+                if(document.querySelector('.swiper-slide-active').classList.contains('green') && flag == true){
+                    imgload();
+                    flag = false;
+                }
+            }
+        },
+    })      
+  </script>
+
+</body>
+</html>

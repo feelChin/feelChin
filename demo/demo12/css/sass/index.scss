@@ -1,0 +1,55 @@
+@charset "utf-8";
+@import '_reset.scss';  
+
+.App{
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+    .leftImg{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+    .leftImg{
+        background: rgb(42, 144, 212);
+    }
+    .rightImg{
+        width: 100%;
+        height: 100%;
+        background: rgb(14, 14, 26);
+    }
+    .control{
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 1px;
+        height: 100%;
+        z-index: 2;
+        cursor: ew-resize;
+        &:after{
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: white;
+            mix-blend-mode: color-dodge;
+        }
+        .menu{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f03;
+            opacity: .7;
+        }
+    }
+}

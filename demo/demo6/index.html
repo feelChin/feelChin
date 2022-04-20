@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet " href="css/index.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <title>移动端下拉页面功能</title>
+</head>
+<body>
+    <div class="App">
+        <div class="AppMobile">
+            <figure class="AppMobileImg">
+                <img class="imgs" src="../style/img/phone.png" alt="" />
+                <div class="AppHtml">
+                    <div class="AppWrapper">
+                        <header>
+                            <i class="webclose iconfont">&#xe633;</i>
+                            <h5>feelChin</h5>
+                            <i class="webmore iconfont">&#xe624;</i>
+                        </header>
+                        <div class="htmlWrapper mousebounce">
+                            <ul>
+                                <li>😃</li>
+                                <li>😊</li>
+                                <li>😜</li>
+                                <li>😍</li>
+                                <li>🤩</li>
+                                <li>🥳</li>
+                                <li>🥶</li>
+                                <li>😃</li>
+                                <li>😊</li>
+                                <li>😜</li>
+                                <li>😍</li>
+                                <li>🤩</li>
+                                <li>🥳</li>
+                                <li>🥶</li>
+                                <li>😃</li>
+                                <li>😊</li>
+                                <li>😜</li>
+                                <li>😍</li>
+                                <li>🤩</li>
+                                <li>🥳</li>
+                                <li>🥶</li>
+                            </ul>
+                        </div>
+                        <footer class="Appnav">
+                            <a href="">
+                                <div class="icon active">
+                                    <span class='iconfont'>&#xe600;</span>
+                                    <figure><img class="imgs" src="../style/img/phone-yun.png" alt="" /></figure>
+                                </div>
+                            </a>
+                        </footer>
+                    </div>
+                    <div class="AppWrapperBg"></div>
+                </div>
+            </figure>
+        </div>
+    </div>
+    <script src='js/index.js'></script>
+    <script>
+        const ScrollRoot = function (mousebounce,overflow) {
+            let ScrollApp = mousebounce,
+                scroller = ScrollApp.children[0],
+                min = 0,
+                offsetY = 0,
+                startY = 0,
+                pointY = 0,
+                isStarted = false,
+                canScroll = false,
+                ScrollAppTop = ScrollApp.scrollTop
+                ScrollAppHeight = ScrollApp.clientHeight || ScrollApp.offfsetHeight,
+                ScrollAppScrollHeight = ScrollApp.scrollHeight;
+
+            if(overflow == false){
+                ScrollAppTop = window.scrollY;
+                ScrollAppHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
+                ScrollAppScrollHeight = document.body.scrollHeight;
+            }
+            
+            if (ScrollAppTop == 0) {
+                canScroll = true;
+            }
+
+            ScrollApp.addEventListener('scroll', function () {
+                if(overflow == false){
+                    ScrollAppTop = window.scrollY;
+                }else{
+                    ScrollAppTop = ScrollApp.scrollTop
+                }
+                if (ScrollAppTop > 0) {
+                    canScroll = false;
+                    scroller.style.transform = `none`;
+                }
+                if (ScrollAppTop + ScrollAppHeight >= ScrollAppScrollHeight) {
+                    canScroll = true;
+                   
+                }
+                if (ScrollAppTop <= 0) {
+                    canScroll = true;
+                }
+            });
+
+            const start = function(e){
+                if (!canScroll) {
+                    return
+                }
+                if(isStarted){   //第二次点击时不触发后续 直接 end
+                    return
+                }
+
+                const point = e.touches ? e.touches[0] : e;
+                isStarted = true;
+                pointY = point.pageY;
+
+                scroller.style.transitionDuration = '0ms';
+                scroller.style.transitionTimingFunction = 'linear';
+                scroller.style.transform = `translate3d(0, ${offsetY}px, 0)`;
+            };
+            const move = function(e){
+                if (!isStarted) {
+                    return
+                }
+                const point = e.touches ? e.touches[0] : e;
+                const deltaY = point.pageY - pointY;
+
+                let MoveoffsetY = Math.round(startY + deltaY);   // 浮点数坐标会影响渲染速度
+                if (MoveoffsetY < min || MoveoffsetY > min) {  // 超出边界时增加阻力
+                    MoveoffsetY = Math.round(startY + deltaY / 5);
+                }
+                offsetY = MoveoffsetY;   // 记录在触发惯性滑动条件下的偏移值和时间
+
+                scroller.style.transform = `translate3d(0, ${offsetY}px, 0)`;
+            };
+            const end = function(e){
+                if (!isStarted) {
+                    return
+                };
+                isStarted = false;
+                offsetY = 0;
+                scroller.style.transitionDuration = 410 + 'ms';
+                scroller.style.transitionTimingFunction = 'cubic-bezier(.25, .46, .45, .94)';
+                scroller.style.transform = `translate3d(0, ${offsetY}px, 0)`;
+            };
+
+
+            scroller.addEventListener('touchstart', function (e) {
+                start(e);
+            });
+            scroller.addEventListener('touchmove', function (e) {
+                move(e);
+            });
+            scroller.addEventListener('touchend', function (e) {
+                end(e);
+            });
+            scroller.addEventListener('touchcancel', function (e) {
+                end(e);
+            });
+        };
+
+        ScrollRoot(_('.mousebounce'),true);
+
+    </script>
+</body>
+</html>

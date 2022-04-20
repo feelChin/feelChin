@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/index.css">
+    <title>图片对比器</title>
+</head>
+<body>
+    <section class="App">
+        <div class="leftImg"></div>
+        <div class="rightImg"></div>
+        <div class="control">
+            <div class="menu"></div>
+        </div>
+    </section>
+    <script>
+        (()=>{
+            const compareImg = function(opt){
+                const { leftImg, control } = opt
+                this.leftImg = document.querySelector(leftImg)
+                this.control = document.querySelector(control)
+
+                this.mouseovers()
+                this.leftImgClitPath()
+            };
+   
+            compareImg.prototype = {
+                mouseovers: function(){
+                    const parent =  this.control.parentNode
+                    const wid = parent.parentNode.offsetWidth
+                    const getLeft = parent.parentNode.offsetLeft
+                    let marginX;
+
+                    const handler = (e) =>{
+                        marginX = e.pageX - getLeft
+                        const num = (marginX / wid) * 100 + '%'
+                        parent.style.left = num
+                        this.leftImg.style.clipPath = `polygon(0 0, ${num} 0, ${num} 100%, 0% 100%)`
+                    }
+
+                    this.control.addEventListener('mousedown',()=>{
+                        parent.parentNode.addEventListener('mousemove',handler)
+                    })
+
+                    parent.parentNode.addEventListener('mouseup',()=>{
+                        parent.parentNode.removeEventListener('mousemove',handler)
+                    })
+                },
+                leftImgClitPath:function(){
+                    this.leftImg.style.clipPath = `polygon(0 0, 50% 0, 50% 100%, 0% 100%)`
+                },
+            }
+
+            window.compareImg = compareImg
+        })();
+
+        new compareImg({
+            leftImg: '.leftImg',
+            control:'.control .menu'
+        });
+    </script>
+</body>
+</html>

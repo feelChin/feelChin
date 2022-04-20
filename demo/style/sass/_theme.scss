@@ -1,0 +1,244 @@
+$w:#fff;
+$b:#000;
+$c3:#333;
+$c6:#666;
+$c9:#999;
+$f2:#f2f2f2;
+$t:transparent;
+$c:currentColor;
+
+@function vw($px) {
+    @return ($px / 375) * 100vw;
+}
+
+@mixin flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flexw {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+@mixin pa {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+@mixin patl {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+@mixin scrollx{
+    overflow-x: auto;
+    overflow-y: hidden;
+    -ms-overflow-style:none;
+    overflow: -moz-scrollbars-none;
+    overflow: -webkit-scrollbars-none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@mixin scrolly{
+    overflow-y: auto;
+    overflow-x: hidden;
+    -ms-overflow-style:none;
+    overflow: -moz-scrollbars-none;
+    overflow: -webkit-scrollbars-none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+
+@mixin ov0 {
+    opacity: 0;
+    visibility: hidden;
+}
+
+@mixin ov1 {
+    opacity: 1;
+    visibility: visible;
+}
+
+@mixin t3 {
+    transition: .33s;
+    transition-timing-function: var(--ease-in-out-b);
+}
+
+@mixin t4 {
+    transition: .44s;
+    transition-timing-function: var(--ease-in-out-b);
+}
+
+@mixin t5 {
+    transition: .55s;
+    transition-timing-function: var(--ease-in-out-b);
+}
+
+@mixin t6 {
+    transition: .66s;
+    transition-timing-function: var(--ease-in-out-b);
+}
+
+.imgs{
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+.linkA{
+    position:absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 7;
+}
+
+.ell{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ells {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+
+.App{
+    position: relative;
+    width: 100vw;
+    height: auto;
+    background: #f2f2f2;
+    .AppMobile{
+        padding: 10vw 0;
+        .AppMobileImg{
+            position: relative;
+            width: 433.1px;
+            margin: 0 auto;
+            .AppHtml{
+                position: absolute;
+                top: 10%;
+                left: 6.56%;
+                width: 86.60%;
+                height: 84.18%;
+                background: $w;
+                .AppWrapperBg{
+                    @include pa;
+                    border: 1px solid rgba(0,0,0,.1);
+                    border-top: none;
+                    box-sizing: border-box;
+                    border-bottom-left-radius: 30px;
+                    border-bottom-right-radius: 30px;
+                    pointer-events: none;
+                }
+                .AppWrapper{
+                    @include pa;
+                    display: flex;
+                    flex-direction: column;
+                    header{
+                        width: 100%;
+                        height: 50px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        border-bottom: 1px solid rgba(0,0,0,.1);
+                        font-size: 18px;
+                        padding: 0 5%;
+                        box-sizing: border-box;
+                        .iconfont{
+                            font-size: inherit;
+                        }
+                    }
+                    .htmlWrapper{
+                        position: relative;
+                        flex: 1;
+                        @include scrolly;
+                        -webkit-overflow-scrolling:touch;
+                    }
+                    .Appnav{
+                        width: 100%;
+                        height: 50px;  
+                        display: flex;
+                        background: $w;
+                        border-top: 1px solid rgba(0,0,0,.1);
+                        a{
+                            flex: 1;
+                            @include flex;
+                            flex-direction: column-reverse;
+                            .icon{
+                                position: relative;
+                                font-size: 16px;
+                                width: 35px;
+                                height: 35px;
+                                border-radius: 50%;
+                                @include flex;
+                                z-index: 2;
+                                font-size: 0;
+                                line-height: 1;
+                                &.active{
+                                    &:after{
+                                        opacity: 1;
+                                        z-index: -1;
+                                    }
+                                    span{
+                                        color: $w;
+                                    }
+                                    figure{
+                                        opacity: 1;
+                                    }
+                                }
+                                &:after{
+                                    content: '';
+                                    @include pa;
+                                    border-radius: 50%;
+                                    background: linear-gradient(to bottom,#f9f9f9,#f03);
+                                    z-index: -3;
+                                    opacity: 0;
+                                    transition: .4s;
+                                }
+                                &:before{
+                                    content: '';
+                                    @include pa;
+                                    border-radius: 50%;
+                                    background: $f2;
+                                    z-index: -2;
+                                }
+                                span{
+                                    line-height: 1;
+                                    color: $c9;
+                                    transition: .3s;
+                                    position: relative;
+                                }
+                                figure{
+                                    position: absolute;
+                                    width: 100%;
+                                    bottom: 0;
+                                    z-index: 2;
+                                    opacity: 0;
+                                    transition: .3s;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

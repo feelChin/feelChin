@@ -1,0 +1,39 @@
+/*
+ * @Author: feelChin 
+ * @Date: 2020-11-03 15:28:25 
+ * @Last Modified by: feelChin
+ * @Last Modified time: 2022-04-14 21:49:49
+ */
+@charset "utf-8";
+@import '../../../style/sass/_reset.scss';
+@import '../../../style/sass/_theme.scss';
+@import url('../../style/iconfont/iconfont.css');
+
+.pubuliu{
+    width: 90%;
+    margin: 5vw auto;
+    position: relative;
+    li{
+       position: absolute;
+       width: 24%;
+       z-index: 3;
+       font-size: 0;
+       line-height: 1;
+       img{
+           width: 100%;
+           display: block;
+       }
+       h5{
+            width: 100%;
+            height: 50px;
+            text-align: center;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f9f9f9;
+            box-shadow: 0 0 12px rgba(0,0,0,.15);
+        }
+    }
+}
+

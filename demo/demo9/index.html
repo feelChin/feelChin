@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/index.css">
+    <title>无限滚动异步加载数据</title>
+</head>
+<body>
+    <div class="app">
+        <div class="loopList"></div>
+        <div class="loopListObserver"></div>
+        <div class="loopListData">刷新数据中</div>
+    </div>
+</body>
+<script>
+    const loopList = document.querySelector('.loopList');
+    const loopListObserver = document.querySelector('.loopListObserver')
+    const maxLen = 35  // 总共数据
+
+    let count = 8;
+    let limit = count  // 初始化多少条数据
+
+    let end = false
+    if (limit > maxLen) {
+        limit = maxLen
+    }
+
+    const render = () => {
+        let html = '';
+        for (let i = 0; i <= limit; i++) {
+            html += `
+                <div class="item">${i}</div>
+            `
+        }
+        loopList.innerHTML = html
+    }
+
+    render()
+
+    const loadmore = () => {
+        // 模拟异步加载
+        limit += count;
+        if (limit >= maxLen) {
+            limit = maxLen
+            end = true
+        }
+
+        let loopListData = document.querySelector('.loopListData')
+        loopListData.classList.add('active')
+        setTimeout(() => {
+            loopListData.classList.remove('active')
+            render();
+        }, 1000);
+    }
+
+    const intersectionObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !end) {
+            loadmore();
+        }
+    }, { threshold: .5 });
+
+    intersectionObserver.observe(loopListObserver);
+</script>
+</html>

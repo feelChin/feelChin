@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/index.css">
+    <title>长列表虚拟化</title>
+</head>
+<body>
+    <div class="App">
+        <div class="virtual">
+            <div class="virtualList"></div>
+            <div class="virtualPlaceHolder"></div>
+        </div>
+    </div>
+    <script>
+        const $ = function (selector) {
+            return document.querySelector(selector)
+        }
+
+        const virtual = $('.virtual');
+        const virtualList = $('.virtualList');
+        const virtualPlaceHolder = $('.virtualPlaceHolder');
+
+
+        const VIRTUAL_HEIGHT = virtual.offsetHeight;
+        const COUNT = 10  // 渲染数
+        const TOTAL_COUNT = 100000; // 总条数
+
+        const ITEM_HEIGHT = 100 // 高度
+        const TOTAL_HEIGHT = TOTAL_COUNT * ITEM_HEIGHT  // 总高度
+
+        virtualPlaceHolder.style.height = TOTAL_HEIGHT + 'px'
+
+        const render = (start, end) => {
+            const child = virtualList.children;
+            let html = ''
+
+            function renderHTML(index) {
+                return `
+                    <div class="item" style="height:${ITEM_HEIGHT}px;font-size: ${ITEM_HEIGHT / 5}px;" data-index=${index}>第${index}项</div>
+                `
+            }
+
+            for (const item of child) {
+                const index = Number(item.dataset.index);
+                if (index < start || index >= end) {  //列表少于start 或大于 end 则 移除
+                    item.remove();
+                }
+            }
+
+            function renderChild1() {
+                const lastStart = Number(child[0].dataset.index);
+                const lastEnd = Number(child[child.length - 1].dataset.index);
+
+                if (end - 1 - lastEnd > 0) {    // 下滑
+                    for (let i = lastEnd + 1; i < end; i++) {
+                        html += renderHTML(i)
+                    }
+                    virtualList.insertAdjacentHTML('beforeend', html);
+                } else if (start - lastStart < 0) {   // 上滑
+                    for (let i = start; i < lastStart; i++) {
+                        html += renderHTML(i)
+                    }
+                    virtualList.insertAdjacentHTML('afterbegin', html);
+                }
+            }
+
+            function renderChild2() {  //  初始化
+                for (let i = start; i < end; i++) {
+                    html += renderHTML(i)
+                }
+                virtualList.innerHTML = html
+            }
+
+            child.length > 0 ? renderChild1() : renderChild2()
+
+        }
+        render(0, COUNT)
+
+        let scrollTop = 0, translateY = 0;
+        virtual.addEventListener('scroll', function (e) {
+            scrollTop = this.scrollTop
+            const start = Math.max(Math.floor(scrollTop / ITEM_HEIGHT), 0)
+            const end = Math.min(start + COUNT, TOTAL_COUNT)
+            const y = start * ITEM_HEIGHT
+
+            if (scrollTop === 0 || scrollTop === TOTAL_HEIGHT - VIRTUAL_HEIGHT || Math.abs(translateY - y) >= 100) {
+                render(start, end);
+                translateY = y;
+                virtualList.style.transform = 'translate3d(0px, ' + translateY + 'px, 0px)';
+            }
+        });
+    </script>
+</body>
+
+</html>

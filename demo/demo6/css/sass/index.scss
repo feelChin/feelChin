@@ -1,0 +1,23 @@
+/*
+ * @Author: feelChin 
+ * @Date: 2020-11-03 15:28:25 
+ * @Last Modified by: feelChin
+ * @Last Modified time: 2021-05-25 11:59:17
+ */
+@charset "utf-8";
+@import '../../../style/sass/_reset.scss';
+@import '../../../style/sass/_theme.scss';
+@import url('../../style/iconfont/iconfont.css');
+
+
+.mousebounce{
+    background: $f2;
+    ul{
+        width: 100%;
+        background: $w;
+        li{
+            font-size: 40px;
+        }
+    }
+}
+

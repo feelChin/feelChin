@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet " href="css/index.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <title>移动端图片序列化模拟视频</title>
+</head>
+<body>
+    <div class="App">
+        <div class="AppMobile">
+            <figure class="AppMobileImg">
+                <img class="imgs" src="../style/img/phone.png" alt="" />
+                <div class="AppHtml">
+                    <div class="AppWrapper">
+                        <header>
+                            <i class="webclose iconfont">&#xe633;</i>
+                            <h5>feelChin</h5>
+                            <i class="webmore iconfont">&#xe624;</i>
+                        </header>
+                        <div class="htmlWrapper">
+                            <div class="container"></div>
+                        </div>
+                        <footer class="Appnav">
+                            <a href="">
+                                <div class="icon active">
+                                    <span class='iconfont'>&#xe600;</span>
+                                    <figure><img class="imgs" src="../style/img/phone-yun.png" alt="" /></figure>
+                                </div>
+                            </a>
+                        </footer>
+                    </div>
+                    <div class="AppWrapperBg"></div>
+                </div>
+            </figure>
+        </div>
+    </div>
+    <script src='js/index.js'></script>
+    <script>
+        var urlRoot = 'img/';
+        var indexRange = [0, 134];
+        var maxLength = indexRange[1] - indexRange[0] + 1;
+
+        var eleContainer = _('.container');
+        // 存储预加载的DOM对象和长度信息
+        var store = {
+            length: 0
+        };
+
+        for (let i = 0; i <= indexRange[1]; i++) {
+            var img = new Image();
+            img.onload = function () {
+                store.length++;
+                store[i] = this;
+                play();
+            };
+            img.complete = function () {
+                store.length++;
+                store[i] = this;
+                play();
+            };
+            img.onerror = function () {
+                store.length++;
+                play();
+            };
+            img.src = urlRoot + i + '.jpg';
+        }
+
+        var play = function () {
+            // loading进度
+            var percent = Math.round(100 * store.length / maxLength);
+            eleContainer.setAttribute('data-percent', percent);
+
+            if (percent == 100) {
+                var index = indexRange[0];
+                var step = function () {
+                    if (store[index - 1]) {
+                        eleContainer.removeChild(store[index - 1]);
+                    }
+                    eleContainer.appendChild(store[index]);
+
+                    // 序列增加
+                    index++;
+                    // 如果超过最大限制
+                    if (index <= indexRange[1]) {
+                        setTimeout(step, 42);
+                    } else {
+                        eleContainer.innerHTML = ''
+                        play()
+                        // 本段播放结束回调
+                    }
+                };
+                // 等100%动画结束后执行播放
+                setTimeout(step, 0);
+            }
+        };
+    </script>
+</body>
+</html>
