@@ -77,6 +77,12 @@
             "name": "图片对比器",
             "type": "Demo",
             "url": "imgContrast"
+        },
+        {
+            "id": 14,
+            "name": "echarts大屏可视化",
+            "type": "Project",
+            "link": "./html/echarts/index.html"
         }
     ]
 }
